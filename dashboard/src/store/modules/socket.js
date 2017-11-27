@@ -8,6 +8,7 @@ const realtime = {
   mutations: {
     SOCKET_ONOPEN (state, event) {
       state.socket.isConnected = true
+      this.$socket.onmessage = (data) => console.log(data)
     },
     SOCKET_ONCLOSE (state, event) {
       state.socket.isConnected = false

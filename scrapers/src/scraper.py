@@ -1,3 +1,4 @@
+import json
 from .content import MainPage
 
 
@@ -13,13 +14,13 @@ class Scraper:
         print("source {}: Found {} articles".format(self.main_page.source, len(articles)))
         skipped = 0
         for article in articles:
-            if self.redis.get(article.article_id):
-                skipped += 1
-                continue
-            self.redis.set(article.article_id, True)
+            # if self.redis.get(article.article_id):
+            #     skipped += 1
+            #     continue
             self.kafka_producer.send(
                 topic=article.topic(),
-                key=article.article_id,
-                value=article.serialize()
+                value=json.dumps(article.serialize())
             )
+            self.redis.set(article.article_id, True)
+        self.kafka_producer.flush()
         print("source {}: {} articles were old".format(self.main_page.source, skipped))

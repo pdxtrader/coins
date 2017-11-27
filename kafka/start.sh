@@ -55,4 +55,4 @@ if [ -z $KAFKA_JMX_OPTS ]; then
 fi
 
 echo "Starting kafka"
-exec /kafka/bin/kafka-server-start.sh /kafka/config/server.properties
+/create-topics.sh & /kafka/bin/kafka-server-start.sh /kafka/config/server.properties
