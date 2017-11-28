@@ -18,7 +18,6 @@ Vue.use(
     reconnectionDelay: 3000
   }
 )
-store.$socket = Vue.prototype.$socket
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

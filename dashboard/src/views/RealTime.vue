@@ -49,28 +49,27 @@
 
 export default {
   name: 'realtime',
+  computed: {
+    tableItems: function () {
+      console.log(this.$store)
+      return this.$store.state.realtime.messages
+    }
+  },
   data: function () {
     return {
-      tableItems: [
-        {
-          avatar: { url: 'static/img/avatars/6.jpg', status: 'danger' },
-          user: { name: 'Friderik Dávid', new: true, registered: 'Jan 1, 2015' },
-          country: { name: 'Poland', flag: 'static/img/flags/Poland.png' },
-          usage: { value: 43, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Amex', icon: 'fa fa-cc-amex' },
-          activity: 'Last week'
-        }
-      ],
       tableFields: {
-        coin: {
-          label: 'Coin',
+        article_id: {
+          label: 'Article id',
           class: 'text-center'
         },
-        message: {
-          label: 'Message'
+        source: {
+          label: 'Source'
         },
         timestamp: {
           label: 'Timestamp'
+        },
+        title: {
+          label: 'Title'
         }
       }
     }

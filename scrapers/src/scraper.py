@@ -14,13 +14,12 @@ class Scraper:
         print("source {}: Found {} articles".format(self.main_page.source, len(articles)))
         skipped = 0
         for article in articles:
-            # if self.redis.get(article.article_id):
-            #     skipped += 1
-            #     continue
+            if self.redis.hmget("articles", article.article_id):
+                skipped += 1
+                continue
             self.kafka_producer.send(
                 topic=article.topic(),
                 value=json.dumps(article.serialize())
             )
-            self.redis.set(article.article_id, True)
-        self.kafka_producer.flush()
+            self.redis.hmset("articles", {article.article_id: True})
         print("source {}: {} articles were old".format(self.main_page.source, skipped))

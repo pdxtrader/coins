@@ -22,5 +22,5 @@ if $start_timeout_exceeded; then
 fi
 
 echo "Creating topics"
-exec JMX_PORT='' kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 5 \
+JMX_PORT='' kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 5 \
                                 --topic press --config retention.ms=31449600000  --if-not-exists

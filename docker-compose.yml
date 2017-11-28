@@ -31,6 +31,8 @@ services:
       - kafka
   redis:
     image: "redis:alpine"
+    ports: 
+      - "6379:6379"
   redisCommander:
     image: tenstartups/redis-commander
     command: --redis-host redis
@@ -50,6 +52,9 @@ services:
     build: scrapers
     volumes:
       - ./scrapers:/usr/code
+    environment:
+      REDIS_HOST: redis
+      KAFKA_HOST: kafka
   dashboard:
     build: dashboard
     ports:
