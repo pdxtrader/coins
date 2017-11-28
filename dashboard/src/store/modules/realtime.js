@@ -17,6 +17,8 @@ const realtime = {
       console.error(state, event)
     },
     SOCKET_ONMESSAGE (state, message) {
+      console.log(message.data)
+      console.log(JSON.parse(message.data))
       JSON.parse(message.data).forEach(msg => {
         state.messages.push(JSON.parse(msg.message))
       })

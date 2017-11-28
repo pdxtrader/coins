@@ -30,4 +30,4 @@ if __name__ == '__main__':
     while True:
         for scraper in scrapers:
             scraper.run()
-        time.sleep(10)
+        time.sleep(100)

@@ -61,9 +61,6 @@ class Article(HtmlContent):
     def content(self):
         raise NotImplementedError()
 
-    def topic(self):
-        return "press"
-
     def serialize(self):
         return {
             'article_id': self.article_id,

@@ -13,6 +13,7 @@ services:
       KAFKA_BROKER_ID: 0
       KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
       ZOOKEEPER_IP: zookeeper
       ZOOKEEPER_PORT: 2181
     volumes:
@@ -32,7 +33,7 @@ services:
   redis:
     image: "redis:alpine"
     ports: 
-      - "6379:6379"
+      - "6379"
   redisCommander:
     image: tenstartups/redis-commander
     command: --redis-host redis
@@ -48,11 +49,13 @@ services:
     environment:
         POSTGRES_PASSWORD: coins
         POSTGRES_USER: coins
+        POSTGRES_DB: coins
   scrapers:
     build: scrapers
     volumes:
       - ./scrapers:/usr/code
     environment:
+      PYTHONUNBUFFERED: 1
       REDIS_HOST: redis
       KAFKA_HOST: kafka
   dashboard:

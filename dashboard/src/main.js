@@ -10,7 +10,7 @@ import VueNativeSock from 'vue-native-websocket'
 Vue.use(BootstrapVue)
 Vue.use(
   VueNativeSock,
-  'ws://localhost:9999/?topic=press&consumerGroup=dashboard',
+  'ws://localhost:9999/?topic=press&consumerGroup=dashboard&offset=0',
   {
     store: store,
     reconnection: true,
