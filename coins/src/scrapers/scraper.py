@@ -1,8 +1,14 @@
+"""
+Shared parsing classes
+"""
 import json
 from .content import MainPage
 
 
 class Scraper:
+    """
+    Generic parser
+    """
     def __init__(self, main_page, redis, kafka_producer):
         assert isinstance(main_page, MainPage)
         self.main_page = main_page
@@ -10,6 +16,9 @@ class Scraper:
         self.kafka_producer = kafka_producer
 
     def run(self):
+        """
+        Runs the job
+        """
         articles = self.main_page.get_articles()
         print("source {}: Found {} articles".format(self.main_page.source, len(articles)))
         skipped = 0

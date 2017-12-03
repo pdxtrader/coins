@@ -3,6 +3,7 @@ WORKDIR /usr/code
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
-
+COPY run_beat.sh /usr/bin/
+COPY run_worker.sh /usr/bin/
 COPY . .
-CMD [ "/usr/code/run.py" ]
+ENTRYPOINT [ "bash" ]

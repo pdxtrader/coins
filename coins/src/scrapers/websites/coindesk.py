@@ -1,7 +1,13 @@
-from .content import Article, MainPage
+"""
+Coindesk subclasses
+"""
+from ..content import Article, MainPage
 
 
 class CoinDeskMainPage(MainPage):
+    """
+    Coindesk subclass
+    """
     def __init__(self):
         super(CoinDeskMainPage, self).__init__(
             'https://www.coindesk.com', CoinDeskArticle, 'coindesk'
@@ -19,6 +25,9 @@ class CoinDeskMainPage(MainPage):
 
 
 class CoinDeskArticle(Article):
+    """
+    Coindesk subclass
+    """
     source = "Coindesk"
 
     def content(self):

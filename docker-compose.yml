@@ -4,6 +4,7 @@ services:
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
+
   kafka:
     build: kafka
     ports:
@@ -20,6 +21,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - zookeeper
+
   kafka-websocket:
     build: kafka-websocket
     environment:
@@ -30,10 +32,12 @@ services:
       - ./kafka-websocket:/usr/code
     depends_on:
       - kafka
+
   redis:
     image: "redis:alpine"
     ports: 
-      - "6379"
+      - "6378:6379"
+
   redisCommander:
     image: tenstartups/redis-commander
     command: --redis-host redis
@@ -41,6 +45,7 @@ services:
       - redis
     ports:
       - "4567:8081"
+
   db:
     image: postgres:alpine
     restart: always
@@ -50,17 +55,40 @@ services:
         POSTGRES_PASSWORD: coins
         POSTGRES_USER: coins
         POSTGRES_DB: coins
-  scrapers:
-    build: scrapers
-    volumes:
-      - ./scrapers:/usr/code
-    environment:
-      PYTHONUNBUFFERED: 1
-      REDIS_HOST: redis
-      KAFKA_HOST: kafka
+
   dashboard:
     build: dashboard
     ports:
       - "18080:8080"
     volumes:
       - ./dashboard:/usr/code
+
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:latest
+    environment:
+        - RABBITMQ_DEFAULT_USER=admin
+        - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+        - "5672"
+
+  celeryworker:
+    build: coins
+    command: run_worker.sh
+    volumes:
+      - ./coins:/usr/code
+    environment:
+      - KAFKA_HOST=kafka
+      - REDIS_HOST=redis
+    depends_on:
+      - rabbit
+      - kafka
+      - redis
+  
+  celerybeat:
+    build: coins
+    command: run_beat.sh
+    volumes:
+      - ./coins:/usr/code
+    depends_on:
+      - rabbit
