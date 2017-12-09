@@ -24,3 +24,6 @@ fi
 echo "Creating topics"
 JMX_PORT='' kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 \
                                 --topic press --config retention.ms=31449600000  --if-not-exists
+
+JMX_PORT='' kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 \
+                                --topic coins --config retention.ms=31449600000  --if-not-exists

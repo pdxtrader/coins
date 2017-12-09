@@ -17,8 +17,8 @@ class ThrottledApiException(Exception):
     """
     Exception for Throttled
     """
-    def __init__():
-        super(ThrottledApiException, self).__init__("Request throttled")
+    def __init__(self):
+        super().__init__("Request throttled")
 
 
 class JsonApi:
@@ -26,24 +26,23 @@ class JsonApi:
     Json api class
     """
 
-    def __init__(self, redis, base, available_resources=None):
-        assert base is not None
+    def __init__(self, base, available_resources):
+        assert isinstance(available_resources, list), "available resources should be a list"
         self.available_resources = available_resources or []
-        self.redis = redis
-        self.base = base
+        self.base = base if base.endswith("/") else base + "/"
 
-    def get(self, resource):
+    def get(self, resource, data=None):
         """
         get request to a resource
         """
         assert resource in self.available_resources
 
-        url = '{}/{}'.format(self.base, resource)
-        response = requests.get(url)
+        url = '{}{}'.format(self.base, resource)
+        response = requests.get(url, data)
         if not response.ok:
             raise ApiException("Got {} from {}".format(response.status, url))
         try:
-            return json.load(response.text)
+            return json.loads(response.text)
         except json.JSONDecodeError:
             raise ApiException("Not json response form {}".format(url))
 
@@ -55,6 +54,7 @@ class ThrottledJsonApi(JsonApi):
     REDIS_BASE_KEY = "throttles"
 
     def __init__(self, redis, requests_per_minute, identifier, *args, **kwargs):
+        assert requests_per_minute > 0, "requests per minute cannot be <=0"
         self.redis = redis
         self.requests_per_minute = requests_per_minute
         self.identifier = identifier
@@ -64,13 +64,19 @@ class ThrottledJsonApi(JsonApi):
         """
         check redis for last request
         """
-        last_request_ts = self.redis.shmget(self.REDIS_BASE_KEY, self.identifier)
-        return time.time() - last_request_ts > 60 / self.requests_per_minute
+        last_request_ts = self.redis.hmget(self.REDIS_BASE_KEY, self.identifier)[0]
+        if not last_request_ts:
+            return True
+        return time.time() - float(last_request_ts) > 60 / self.requests_per_minute
 
-    def get(self, resource):
+    def get(self, resource, data=None):
         """
         override to respect throttle
         """
         if not self.should_allow():
             raise ThrottledApiException
-        self.redis.shmset(self.REDIS_BASE_KEY, self.identifier)
+        self.redis.hmset(self.REDIS_BASE_KEY, {
+            self.identifier: time.time()
+        })
+        response = super().get(resource, data)
+        return response
