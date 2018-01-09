@@ -30,7 +30,6 @@ class Scraper:
                 topic="press",
                 value=json.dumps(article.serialize())
             )
-            print(article.serialize())
             self.redis.hmset("articles", {article.article_id: 1})
         print("source {}: {} articles were old".format(self.main_page.source, skipped))
         self.kafka_producer.flush()
