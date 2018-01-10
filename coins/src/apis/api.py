@@ -80,3 +80,19 @@ class ThrottledJsonApi(JsonApi):
         })
         response = super().get(resource, data)
         return response
+
+
+class Producer:
+    """
+    produces messages to kafka
+    """
+    def __init__(self, kafka_producer, api):
+        self.kafka_producer = kafka_producer
+        self.api = api
+        assert isinstance(api, JsonApi)
+
+    def produce(self):
+        """
+        parsing here override
+        """
+        raise NotImplementedError

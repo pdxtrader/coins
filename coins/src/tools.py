@@ -9,7 +9,7 @@ from kafka.errors import NoBrokersAvailable
 
 
 def get_kafka_producer(
-        kafka_host=os.environ.get('KAFKA_HOST', '0.0.0.0'), port=9092,
+        kafka_host=os.environ.get('KAFKA_HOST', 'kafka'), port=9092,
         max_attempts=5, delay=5):
     """
     get kafka producer, with max_attempts retries
@@ -32,7 +32,7 @@ def get_kafka_producer(
     return producer
 
 
-def get_redis_connection(redis_host=os.environ.get('REDIS_HOST', 'localhost'), port=6379):
+def get_redis_connection(redis_host=os.environ.get('REDIS_HOST', 'localhost'), port=6378):
     """
     get redis connection
     """

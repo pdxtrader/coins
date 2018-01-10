@@ -2,7 +2,7 @@
 CoinmarketCap api classes
 """
 import json
-from .api import ThrottledJsonApi
+from .api import ThrottledJsonApi, Producer
 
 
 class CoinmarketcapApi(ThrottledJsonApi):
@@ -20,23 +20,20 @@ class CoinmarketcapApi(ThrottledJsonApi):
         )
 
 
-class CoinmarketcapProducer(CoinmarketcapApi):
+class CoinmarketcapProducer(Producer):
     """
     class responsible for the data production
     """
-    def __init__(self, redis, kafka_producer):
-        self.kafka_producer = kafka_producer
-        super().__init__(
-            redis
-        )
 
-    def run(self):
+    def produce(self):
         """
         run the job
         """
-        data = self.get('ticker')
+        data = self.api.get('ticker')
         for coin in data:
+            print(coin)
             self.kafka_producer.send(
                 topic="coins",
                 value=json.dumps(coin)
             )
+        self.kafka_producer.flush()

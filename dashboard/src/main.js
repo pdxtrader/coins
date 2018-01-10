@@ -18,6 +18,16 @@ Vue.use(
     reconnectionDelay: 3000
   }
 )
+Vue.use(
+  VueNativeSock,
+  'ws://localhost:9999/?topic=coins&consumerGroup=dashboard&offset=0',
+  {
+    store: store,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 3000
+  }
+)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -3,7 +3,7 @@ Parsing tasks
 """
 import os
 from redis import Redis
-from ..tools import get_kafka_producer
+from ..tools import get_kafka_producer, get_redis_connection
 from ..celery.celery import APP
 from .scraper import Scraper
 from .websites.coindesk import CoinDeskMainPage
@@ -14,7 +14,7 @@ def scrape(mainpage):
     """
     run a scraper
     """
-    redis = Redis(os.environ.get('REDIS_HOST', 'localhost'), db=0)
+    redis = get_redis_connection()
     scraper = Scraper(mainpage, redis=redis, kafka_producer=get_kafka_producer())
     return scraper.run()
 
