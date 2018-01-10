@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy import Table, Column, Integer, Float, String, ForeignKey
+from sqlalchemy import Table, Column, Integer, String
 
 
 def connect(user, password, db, host='localhost', port=5432):
