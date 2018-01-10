@@ -6,3 +6,4 @@ celery==4.1.0
 sqlalchemy==1.1.15
 psycopg2==2.7.3.2
 python-binance==0.5.15
+protobif==3.5.1
