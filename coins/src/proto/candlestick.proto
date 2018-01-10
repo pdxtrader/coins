@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package exchange;
+
+
+message Candlestick {
+  enum Coin {
+    UNKNOWN_C = 0;
+    BTC = 1;
+    ETH = 2;
+    LTC = 3;
+    DASH = 4;
+    XMR = 5;
+    ADA = 6;
+  }
+
+  enum Exchange {
+    UNKNOWN_E = 0;
+    BINANCE = 1;
+  }
+
+  Exchange exchange = 1;
+  Coin source = 2;
+  Coin target = 3;
+  float openPrice = 4;
+  float closePrice = 5;
+  float volume = 6;
+  int64 openTime = 7;
+  int64 closeTime = 8;
+  int32 tradeCount = 9;
+  float highPrice = 10;
+  float lowPrice = 11;
+}

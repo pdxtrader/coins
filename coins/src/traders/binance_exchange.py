@@ -3,6 +3,7 @@ Binance Client
 """
 from binance.client import Client
 from .exchange import Exchange
+from ..proto.candlestick_pb2 import Candlestick
 
 SYMBOLS = set(['ETH', 'LTC', 'DASH', 'XMR','ADA'])
 
@@ -20,11 +21,18 @@ class Binance(Exchange):
         self.client = client
         self.socket_manager = socket_manager
 
-    def buy_orders(self, source: str, target: str) -> list:
+    def start_collecting(self) -> bool:
         """
-        all prices
+        start collecting data about trades
         """
-        return client. = self.get_all_tickers()
 
-    def price_of(self, source: str, target: str) -> float:
-        
+        pass
+
+    def publish(self, candlestic: Candlestick) -> bool:
+        """
+        publish trade to kafka
+        """
+        self.kafka_producer.send(
+            topic="candlesticks",
+            value=candlestic.SerializeToString()
+        )

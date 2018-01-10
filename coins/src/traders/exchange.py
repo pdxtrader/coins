@@ -1,8 +1,7 @@
 """
 Exchange classes
 """
-import json
-
+from ..proto.candlestick_pb2 import Candlestick
 
 class Trade:
     """
@@ -46,18 +45,6 @@ class Exchange:
         self.kafka_producer = kafka_producer
         self.exchange_id = exchange_id
 
-    def buy_orders(self, source: str, target: str) -> list:
-        """
-        all buy orders for specific combination
-        """
-        pass
-
-    def sell_orders(self, source: str, target: str) -> list:
-        """
-        all sell orders for specific combination
-        """
-        pass
-
     def place_order(self, order: Order) -> bool:
         """
         trade a specific order
@@ -70,14 +57,11 @@ class Exchange:
         """
         pass
 
-    def publish(self, trade: Trade) -> bool:
+    def publish(self, candlestic: Candlestick) -> bool:
         """
         publish trade to kafka
         """
         self.kafka_producer.send(
-            topic="trades",
-            value=json.dumps({
-                "exchange_id": self.exchange_id,
-                **trade.serialize()
-            })
+            topic="candlesticks",
+            value=candlestic.SerializeToString()
         )
