@@ -41,7 +41,7 @@ class Exchange:
     Exchange class
     """
 
-    def __init__(self, exchange_id: int, kafka_producer):
+    def __init__(self, exchange_id: str, kafka_producer):
         self.kafka_producer = kafka_producer
         self.exchange_id = exchange_id
 
